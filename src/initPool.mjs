@@ -50,6 +50,7 @@ Object.assign(initPool, {
       const destKey = (poolOptRenames[key] || key);
       poolOpt[destKey] = val;
     });
+    pop.done();
     if (poolOpt.database === '') { poolOpt.database = poolOpt.user; }
     return poolOpt;
   },

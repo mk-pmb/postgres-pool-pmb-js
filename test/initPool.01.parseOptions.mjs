@@ -66,6 +66,15 @@ test('Pool config: Other custom settings', async (t) => {
 });
 
 
+test('Pool config: Unsupported custom settings', async (t) => {
+  t.plan(1);
+  t.throws(() => ppp.initPool.parseOpt({
+    password: 'too many letters',
+    max: 'too unspecific a name',
+  }), /Unsupported leftover keys: password, max$/);
+});
+
+
 
 
 
