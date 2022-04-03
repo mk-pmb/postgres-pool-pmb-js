@@ -2,20 +2,12 @@
 
 const kisi = {
 
-  singleKey(x) {
-    if (!x) { return null; }
-    const k = Object.keys(x);
-    if (k.length === 1) { return k[0]; }
-    return null;
+  singleEntry(x) {
+    if (!x) { return []; }
+    const ent = Object.entries(x);
+    if (ent.length === 1) { return ent[0]; }
+    return [];
   },
-
-  maybeFlatCopyOpts(opt) {
-    if (!opt) { return {}; }
-    const d = 'popDirectly';
-    if (kisi.singleKey(opt) === d) { return opt[d]; }
-    return { ...opt };
-  },
-
 
 };
 

@@ -44,10 +44,7 @@ test('Pool config: Database names', async (t) => {
 
 test('Pool config: Other custom settings', async (t) => {
   t.plan(1);
-  const verbatim = {
-    host: 'example.net',
-    port: 2305,
-  };
+  const verbatim = { host: 'example.net', port: 2305 };
   t.same(ppp.initPool.parseOpt({
     ...verbatim,
     pswd: 'qwert',
@@ -72,6 +69,17 @@ test('Pool config: Unsupported custom settings', async (t) => {
     password: 'too many letters',
     max: 'too unspecific a name',
   }), /Unsupported leftover keys: password, max$/);
+});
+
+
+test('Pool config: Pop options destructively', async (t) => {
+  t.plan(4);
+  const opt = { host: 'example.net', port: 2305 };
+  const expected = { ...expectedDefaultPoolConfig, ...opt };
+  t.same(ppp.initPool.parseOpt(opt), expected);
+  t.same(Object.keys(opt), ['host', 'port']);
+  t.same(ppp.initPool.parseOpt({ popDirectly: opt }), expected);
+  t.same(Object.keys(opt), []);
 });
 
 
