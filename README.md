@@ -16,19 +16,21 @@ API
 
 This module exports an object that holds these functions:
 
-### initPool(pg, opt)
+### initPool(opt)
 
 Returns a promise that will be resolved when we get
 positive confirmation that the pool accepted our login
 and has passed a trivial health check.
 
-`pg` is your database driver object. It should have an API compatible
-to the Promise-ing parts of the interface of package `pg` from
-[brianc's `node-postgres`](https://github.com/brianc/node-postgres).
+`opt` is an optional options object that supports these mostly optional keys:
 
-`opt` is an optional options object that supports these optional keys:
-
-* (all options from [`src/initPool.opts.mjs`](src/initPool.opts.mjs))
+* `pgLib` (required):
+  Your database driver object. It should have an API compatible
+  to the Promise-ing parts of the interface of package `pg` from
+  [brianc's `node-postgres`](https://github.com/brianc/node-postgres).
+* `poolCfg`: An options object with config details for the actual pool.
+  Supported options (all optional) can be found in
+  [`src/initPool.opts.mjs`](src/initPool.opts.mjs).
 
 
 

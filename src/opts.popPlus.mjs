@@ -8,6 +8,8 @@ import vTry from 'vtry';
 
 import kisi from './kitchenSink.mjs';
 
+const doNothing = Boolean;
+
 
 const extraRules = {
 
@@ -32,14 +34,15 @@ function extendedMustBe(rule, descr) {
 
 function optPopPlus(how, origOpt) {
   const [singleKey, singleValue] = kisi.singleEntry(origOpt);
-  const popFrom = (
-    ((singleKey === 'popDirectly') && singleValue)
-    || { ...origOpt }
-  );
-  return objPop.d(popFrom, {
+  const useClone = (singleKey !== 'popDirectly');
+  const remain = (useClone ? { ...origOpt }
+    : mustBe('obj', singleKey)(singleValue));
+  const pop = objPop.d(remain, {
     mustBe: extendedMustBe,
     mustBeDescrPrefix: how.itemDescr + ' ',
   }).mustBe;
+  pop.expectEmptyIfUsingClone = (useClone ? pop.expectEmpty : doNothing);
+  return pop;
 }
 
 

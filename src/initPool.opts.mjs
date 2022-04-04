@@ -5,7 +5,7 @@ export default [
   ['host',              'nonEmpty str',   'localhost'],
   ['port',              'pos int',        5432],
   ['user',              'nonEmpty str',   'postgres'],
-  ['pswd',              'str',            ''],
+  ['pswd',              'str',            'verbatim:'],
 
   // name = database name; if empty, use same as user name.
   ['name',              'str | undef',    ''],
@@ -17,4 +17,6 @@ export default [
   ['connect_timeout',   'duration',       '3 sec'],
   ['idle_timeout',      'duration',       '30 sec'],
 
+  // Bonus options that pg ignores but apps might find useful.
+  ['table_name_prefix', 'str',            ''],
 ];

@@ -4,37 +4,40 @@ import test from 'p-tape';
 
 import ppp from '../ppp.mjs';
 
+const patco = ppp.initPool.parseAndTanslateCtorOpt;
+
 
 const expectedDefaultPoolConfig = {
   host: 'localhost',
   port: 5432,
   user: 'postgres',
-  password: '',
+  pswd: 'verbatim:',  // NB: This is NOT pg's `password` option.
   database: 'postgres',   // inherited from .user
   max: 20,
   connectionTimeoutMillis: 3e3,
   idleTimeoutMillis: 30e3,
+  table_name_prefix: '',
 };
 
 
 test('Pool config: Defaults', async (t) => {
   t.plan(1);
-  t.same(ppp.initPool.parseOpt(), expectedDefaultPoolConfig);
+  t.same(patco(), expectedDefaultPoolConfig);
 });
 
 
 test('Pool config: Database names', async (t) => {
   t.plan(3);
-  t.same(ppp.initPool.parseOpt({ user: 'alice' }), {
+  t.same(patco({ user: 'alice' }), {
     ...expectedDefaultPoolConfig,
     user: 'alice',
     database: 'alice',
   });
-  t.same(ppp.initPool.parseOpt({ name: 'books' }), {
+  t.same(patco({ name: 'books' }), {
     ...expectedDefaultPoolConfig,
     database: 'books',
   });
-  t.same(ppp.initPool.parseOpt({ user: 'alice', name: 'books' }), {
+  t.same(patco({ user: 'alice', name: 'books' }), {
     ...expectedDefaultPoolConfig,
     user: 'alice',
     database: 'books',
@@ -44,8 +47,12 @@ test('Pool config: Database names', async (t) => {
 
 test('Pool config: Other custom settings', async (t) => {
   t.plan(1);
-  const verbatim = { host: 'example.net', port: 2305 };
-  t.same(ppp.initPool.parseOpt({
+  const verbatim = {
+    host: 'example.net',
+    port: 2305,
+    table_name_prefix: 'blog_',
+  };
+  t.same(patco({
     ...verbatim,
     pswd: 'qwert',
     max_pool_clients: 1,
@@ -54,7 +61,7 @@ test('Pool config: Other custom settings', async (t) => {
   }), {
     ...verbatim,
     user: 'postgres',
-    password: 'qwert',
+    pswd: 'qwert',
     database: 'postgres',
     max: 1,
     connectionTimeoutMillis: 30e3,
@@ -65,7 +72,7 @@ test('Pool config: Other custom settings', async (t) => {
 
 test('Pool config: Unsupported custom settings', async (t) => {
   t.plan(1);
-  t.throws(() => ppp.initPool.parseOpt({
+  t.throws(() => patco({
     password: 'too many letters',
     max: 'too unspecific a name',
   }), /Unsupported leftover keys: password, max$/);
@@ -76,9 +83,9 @@ test('Pool config: Pop options destructively', async (t) => {
   t.plan(4);
   const opt = { host: 'example.net', port: 2305 };
   const expected = { ...expectedDefaultPoolConfig, ...opt };
-  t.same(ppp.initPool.parseOpt(opt), expected);
+  t.same(patco(opt), expected);
   t.same(Object.keys(opt), ['host', 'port']);
-  t.same(ppp.initPool.parseOpt({ popDirectly: opt }), expected);
+  t.same(patco({ popDirectly: opt }), expected);
   t.same(Object.keys(opt), []);
 });
 
