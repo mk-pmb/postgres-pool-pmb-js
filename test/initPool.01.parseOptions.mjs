@@ -11,8 +11,8 @@ const expectedDefaultPoolConfig = {
   host: 'localhost',
   port: 5432,
   user: 'postgres',
-  pswd: 'verbatim:',  // NB: This is NOT pg's `password` option.
-  database: 'postgres',   // inherited from .user
+  pswd: 'env:PGPASSWORD', // NB: This is NOT pg's `password` option.
+  database: 'postgres', // inherited from .user
   max: 20,
   connectionTimeoutMillis: 3e3,
   idleTimeoutMillis: 30e3,

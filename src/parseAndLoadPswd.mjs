@@ -21,6 +21,7 @@ const rd = {
   verbatim: String,
   async utf8file(path) { return nodeFsPr.readFile(path, 'UTF-8'); },
   async json(spec) { return JSON.parse(await EX(spec)); },
+  env(varName) { return String(getOwn(process.env, varName) || ''); },
 };
 
 

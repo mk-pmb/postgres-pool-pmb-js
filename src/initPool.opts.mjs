@@ -5,7 +5,7 @@ export default [
   ['host',              'nonEmpty str',   'localhost'],
   ['port',              'pos int',        5432],
   ['user',              'nonEmpty str',   'postgres'],
-  ['pswd',              'str',            'verbatim:'],
+  ['pswd',              'str',            'env:PGPASSWORD'],
 
   // name = database name; if empty, use same as user name.
   ['name',              'str | undef',    ''],

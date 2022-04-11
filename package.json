@@ -1,5 +1,5 @@
 { "name": "postgres-pool-pmb",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Nicer API for the parts of the `pg` postgres module that I actually use. Mostly renamed config keys for pool config",
   "keywords": [
     "pg",
